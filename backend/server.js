@@ -1,40 +1,45 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const cors = require('cors');
 require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const app = express();
-app.use(express.json());
-app.use(cors());
+const PORT = 5000;
 
-app.post('/send-email', async (req, res) => {
-    const { to, subject, text } = req.body;
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// POST Route to handle email submission
+app.post('/api/contact', async (req, res) => {
+    const { fullName, email, phone, message } = req.body;
+
+    // Configure transporter
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER, // Your email
+            pass: process.env.EMAIL_PASS, // Your app password
+        },
+    });
+
+    // Email content
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: '5215ssingh@gmail.com', // Receiver's email
+        subject: `Contact Form Submission from ${fullName}`,  // Fixed the template string
+        text: `Name: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,  // Fixed the template string
+    };
 
     try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
-
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to,
-            subject,
-            text,
-        };
-
         const result = await transporter.sendMail(mailOptions);
-        res.status(200).json({ message: 'Email sent successfully!', result });
+        console.log('Email sent successfully:', result); // Log success in the terminal
+        res.status(200).json({ message: 'Email sent successfully', result });
     } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({ message: 'Failed to send email', error });
+        console.error('Error sending email:', error); // Log error in the terminal
+        res.status(500).json({ error: 'Failed to send email' });
     }
 });
 
-const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// Start server
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));  // Fixed template string

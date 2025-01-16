@@ -1,12 +1,12 @@
 import React from 'react';
-import EmailForm from './components/EmailForm';
+import ContactForm from './components/ContactForm';
 import './App.css';
+
 
 const App = () => {
     return (
         <div>
-            <h1>Email Sender App</h1>
-            <EmailForm />
+            <ContactForm />
         </div>
     );
 };
