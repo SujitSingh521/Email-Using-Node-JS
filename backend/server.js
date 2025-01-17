@@ -7,7 +7,9 @@ const app = express();
 const PORT = 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin:"https://potential-space-meme-pjrv9pp4r6wqh975v-3000.app.github.dev"
+}));
 app.use(express.json());
 
 // POST Route to handle email submission
@@ -26,7 +28,7 @@ app.post('/api/contact', async (req, res)=>{
     // Email content
     const mailOptions ={
         from: process.env.EMAIL_USER,
-        to: '5215ssingh@gmail.com', // Receiver's email
+        to: email, // Receiver's email
         subject: `Contact Form Submission from ${fullName}`,  // Fixed the template string
         text: `Name: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,  // Fixed the template string
     };
