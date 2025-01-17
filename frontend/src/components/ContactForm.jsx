@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
-const ContactForm = () => {
+const ContactForm =()=>{
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -10,15 +10,15 @@ const ContactForm = () => {
 
     const [status, setStatus] = useState('');
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    const handleChange =(e)=>{
+        const {name, value} = e.target;
+        setFormData({...formData, [name]: value});
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e)=>{
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:5000/api/contact', {
+            const response = await fetch('http://localhost:5000/api/contact',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -26,10 +26,10 @@ const ContactForm = () => {
                 body: JSON.stringify(formData),
             });
             const data = await response.json();
-            if (response.ok) {
+            if(response.ok){
                 setStatus('Email sent successfully!');
-                setFormData({ fullName: '', email: '', phone: '', message: '' });
-            } else {
+                setFormData({fullName: '', email: '', phone: '', message: ''});
+            }else{
                 setStatus('Failed to send email.');
             }
         } catch (error) {

@@ -11,33 +11,33 @@ app.use(cors());
 app.use(express.json());
 
 // POST Route to handle email submission
-app.post('/api/contact', async (req, res) => {
-    const { fullName, email, phone, message } = req.body;
+app.post('/api/contact', async (req, res)=>{
+    const {fullName, email, phone, message} = req.body;
 
     // Configure transporter
     const transporter = nodemailer.createTransport({
         service: 'gmail',
-        auth: {
+        auth:{
             user: process.env.EMAIL_USER, // Your email
             pass: process.env.EMAIL_PASS, // Your app password
         },
     });
 
     // Email content
-    const mailOptions = {
+    const mailOptions ={
         from: process.env.EMAIL_USER,
         to: '5215ssingh@gmail.com', // Receiver's email
         subject: `Contact Form Submission from ${fullName}`,  // Fixed the template string
         text: `Name: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,  // Fixed the template string
     };
 
-    try {
+    try{
         const result = await transporter.sendMail(mailOptions);
         console.log('Email sent successfully:', result); // Log success in the terminal
-        res.status(200).json({ message: 'Email sent successfully', result });
-    } catch (error) {
+        res.status(200).json({message: 'Email sent successfully', result});
+    }catch (error){
         console.error('Error sending email:', error); // Log error in the terminal
-        res.status(500).json({ error: 'Failed to send email' });
+        res.status(500).json({error: 'Failed to send email'});
     }
 });
 
